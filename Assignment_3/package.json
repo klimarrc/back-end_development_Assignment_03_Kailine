@@ -4,8 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "ts-node src/server.ts",
+    "build": "tsc",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
   },
+
+
   "repository": {
     "type": "git",
     "url": "git+https://github.com/klimarrc/back-end_development_Assignment_03_Kailine.git"
@@ -32,6 +38,7 @@
   },
   "dependencies": {
     "express": "^5.2.1",
+    "firebase-admin": "^13.6.1",
     "joi": "^18.0.2"
   }
 }
