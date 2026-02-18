@@ -6,13 +6,14 @@ export const postSchemas = {
     // POST /posts - Create new post
     create: {
         body: Joi.object({
-            userId: Joi
+            id: Joi
             .string()
             .required()
             .messages({
-                "string.base": "User ID must be a string",
-                "string.empty": "User ID is required",
-                "any.required": "User ID is required",
+                "number.base": "ID must be a number",
+                "string.base": "ID must be a string",
+                "string.empty": "ID is required",
+                "any.required": "ID is required",
             }),
             name: Joi
             .string()

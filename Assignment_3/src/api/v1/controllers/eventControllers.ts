@@ -2,22 +2,43 @@ import { Request, Response, NextFunction } from "express";
 import * as postService from "../services/eventPostService";
 import { successResponse } from "../models/responseModel";
 import { EventPost } from "../models/eventPostModel";
+import { HTTP_STATUS } from "src/constants/httpConstants";
 
-/**
- * Handles updating a post.
- * @param {Request} req - The request object.
- * @param {Response} res - The response object.
- * @param {NextFunction} next - The next middleware function.
- * @returns {Promise<void>}
- */
-export const updateEventHandler = async (
+// Create post handler - validates body only
+export const createPostHandler = async (
+    req: Request,
+    res: Response,  
+    next: NextFunction  
+): Promise<void> => {
+    try {
+
+       const {id, name, capacity, registrationCount, status, category } = req.body;
+       const createdAt = new Date().toISOString();
+       const postData = {
+        id,
+        name,
+        date: new Date(req.body.date),
+        capacity,
+        registrationCount,
+        status,
+        category,
+        createdAt
+       };
+         const newPost = await postService.createEventPost(postData);
+        res.status(HTTP_STATUS.CREATED).json(successResponse(newPost, "Event created"));
+    } catch (error: unknown) {
+        next(error);
+    }
+};
+
+export const getAllPostsHandler = async (
     req: Request,
     res: Response,
     next: NextFunction
 ): Promise<void> => {
     try {
-        await postService.updateEvent({ id: req.params.id, ...req.body });
-        res.status(200).json(successResponse("", "Event updated"));
+        const posts = await postService.getAllEventPosts();
+        res.status(HTTP_STATUS.OK).json(successResponse(posts));
     } catch (error: unknown) {
         next(error);
     }
@@ -29,45 +50,40 @@ export const getPostByIdHandler = async (
     next: NextFunction
 ): Promise<void> => {
     try {
-        const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
-        const post = await postService.getPostById(id);  
-        if (!post) {
-            res.status(404).json({ error: "Event not found" });
-            return;
-        }   
-        res.status(200).json(successResponse(post));
+        const {id} = req.params;
+        const post = await postService.getPostById(id as string);
+        res.status(HTTP_STATUS.OK).json(successResponse({post}, "Event retrieved successfully"));
     } catch (error: unknown) {
-        next(error);
-    }   
-};  
+        next(error);    
+    }
 
-export const createPostHandler = async (
+
+export const updatePostHandler = async (
     req: Request,
-    res: Response,  
-    next: NextFunction  
+    res: Response,
+    next: NextFunction
 ): Promise<void> => {
     try {
-       const{id, name, date, capacity, registrationCount, status, category} = req.body;
-       const createdAt = new Date().toISOString();
-       const updatedAt = new Date().toISOString();
-
-       const postData: Partial<EventPost> = {
-        id,
-        name,
-        date,
-        capacity,
-        registrationCount,
-        status,
-        category,
-        createdAt,
-        updatedAt
-       };
-       const postResponde = await postService.createEventPost(postData as EventPost);
-       res.status(201).json(successResponse(postResponde, "Event created"));
+         const {id} = req.params;
+         const {id, name, capacity, registrationCount, status, category} = req.body;
+         const updatedAt = new Date().toISOString();    
+         const updatePostData = { 
+            id,
+            name,
+            capacity,
+            registrationCount,
+            status,
+            category,
+            updatedAt
+         };
+         const updatedEventPost = await postService.updateEvent({ id as string, updatePostData });
+        res.status(HTTP_STATUS.OK).json(successResponse({updatedEventPost}, "Event updated"));
     } catch (error: unknown) {
         next(error);
-    }   
+    }
 };
+
+
 
 export const deletePostHandler = async (
     req: Request,
@@ -76,8 +92,8 @@ export const deletePostHandler = async (
 ): Promise<void> => {
     try {
         const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
-        await postService.deletePost(id);
-        res.status(200).json(successResponse("", "Event deleted"));
+        const deletedEvent = await postService.deletePost(id);
+        res.status(HTTP_STATUS.NO_CONTENT).json(successResponse(deletedEvent, "Event deleted"));
     } catch (error: unknown) {
         next(error);
     }
