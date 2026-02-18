@@ -5,10 +5,17 @@ import { postSchemas } from "../validation/eventPostSchemas";
 
 const router = express.Router();
 
-router.post("/", validateRequest(postSchemas.create), postController.createPostHandler);
-router.get("/", postController.getAllPostsHandler);
-router.get("/:id", validateRequest(postSchemas.getById), postController.getPostByIdHandler);
-router.put("/:id", validateRequest(postSchemas.update), postController.updatePostHandler);
-router.delete("/:id", validateRequest(postSchemas.delete), postController.deletePostHandler);
+// Create a new event post
+router.post("/", validateRequest({ body: postSchemas.createPostSchema }), postController.createEventPost);
+// Get all event posts
+router.get("/", postController.getAllEventPosts);
+// Get a specific event post by ID
+router.get("/:id", postController.getEventPostById);
+// Update an existing event post
+router.put("/:id", validateRequest({ body: postSchemas.updatePostSchema }), postController.updateEventPost);
+// Delete an event post
+router.delete("/:id", postController.deleteEventPost);
+
+
 
 export default router;

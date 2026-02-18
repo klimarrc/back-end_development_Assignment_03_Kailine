@@ -1,22 +1,22 @@
-import { Post } from "../models/postModel";
+import { Post } from "../models/eventPostModel";
 import * as firestoreRepository from "../repositories/firestoreRepository";
-import { postSchemas } from "../validation/postSchemas";
+import { postSchemas } from "../validation/eventPostSchemas";
 import { validateRequest } from "../middleware/validate";
 
 const COLLECTION = "posts";
 
 // creating a new post
-export const createPost = async (postData: {userId: string; content: string}): Promise<Post> => {
+export const createEventPost = async (postData: {userId: string; content: string}): Promise<Post> => {
     try {
-        const newPostData = {
+        const newEventPostData = {
             ... postData,
             createdAt: new Date(),
             updatedAt: new Date(),
         }
 
-        const id = await firestoreRepository.createDocument<Post>(COLLECTION, newPostData);
+        const id = await firestoreRepository.createDocument<Post>(COLLECTION, newEventPostData);
 
-        return {id, ... newPostData} as Post;
+        return {id, ... newEventPostData};
        
     } catch (error: unknown) {
         const errorMessage =
