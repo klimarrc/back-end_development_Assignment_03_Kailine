@@ -1,2 +1,4 @@
 node_modules/
 dist/
+# Firebase Admin SDK keys
+my-project-assignment-3-21243-firebase-adminsdk-fbsvc-c56e290851.json
