@@ -1,23 +1,30 @@
-import { Post } from "../models/eventPostModel";
+import { EventCategory, EventPost, EventStatus } from "../models/eventPostModel";
 import * as firestoreRepository from "../repositories/firestoreRepository";
 import { postSchemas } from "../validation/eventPostSchemas";
 import { validateRequest } from "../middleware/validate";
 
-const COLLECTION = "posts";
 
-// creating a new post
-export const createEventPost = async (postData: {userId: string; content: string}): Promise<Post> => {
+const COLLECTION = "posts";
+export const createEventPost = async (postData: 
+    {id: string,
+     name: string,
+     capacity: number,
+     registrationCount: number,
+     date: Date,
+     status: EventStatus,
+     category: EventCategory}): Promise<EventPost> => { 
+    
+     
     try {
-        const newEventPostData = {
-            ... postData,
+        const newEventPost = {
+            ...postData,
+            date: new Date(postData.date),  
             createdAt: new Date(),
             updatedAt: new Date(),
         }
 
-        const id = await firestoreRepository.createDocument<Post>(COLLECTION, newEventPostData);
-
-        return {id, ... newEventPostData};
-       
+        const id = await firestoreRepository.createDocument<EventPost>(COLLECTION, newEventPost);
+        return {id, ...newEventPost}
     } catch (error: unknown) {
         const errorMessage =
             error instanceof Error ? error.message : "Unknown error";
@@ -27,102 +34,97 @@ export const createEventPost = async (postData: {userId: string; content: string
     }
 };
 
-
-// retreiveing all posts
-export const getAllPosts = async (): Promise<Post[]> => {
+export const getAllEventPosts = async (): Promise<EventPost[]> => {
     try {
-        const posts = await firestoreRepository.getAllDocuments<Post>(COLLECTION);
+        const posts = await firestoreRepository.getAllDocuments<EventPost>(COLLECTION);
         return posts;
-       
     } catch (error: unknown) {
         const errorMessage =
             error instanceof Error ? error.message : "Unknown error";
         throw new Error(
-            `Failed to retrive all posts: ${errorMessage}`
+            `Failed to get all posts: ${errorMessage}`
         );
     }
 };
 
-// retreiveing a post by ID
-export const getPostById = async (id: string): Promise<Post> => {
+export const getPostById = async (id: string): Promise<EventPost> => {
     try {
-        const post = await firestoreRepository.getDocById<Post>(COLLECTION, id);
-        
-        if(!post){
+        const post = await firestoreRepository.getDocById<EventPost>(COLLECTION, id);
+        if (!post) {
             throw new Error("Post not found");
-        }
-
-        return post;
-       
+        }   
+        return post;    
     } catch (error: unknown) {
         const errorMessage =
             error instanceof Error ? error.message : "Unknown error";
         throw new Error(
-            `Failed to retrive the post: ${errorMessage}`
+            `Failed to get post by ID: ${errorMessage}`
         );
     }
 };
 
-// updating a post
-export const updatePost = async (id: string, postData: {userId: string, content: string}): Promise<Post> => {
+export const updateEvent = async (postData:
+    {id: string,
+     name: string,
+     capacity: number,
+     registrationCount: number,
+     date: Date,
+     status: EventStatus,
+     category: EventCategory}): Promise<EventPost> => { 
     try {
-        const updatedPost: Partial<Post> = {};
+        const updatedEventPost: Partial<EventPost> = {};
+        if (postData.id !== undefined){
+            updatedEventPost.id = postData.id;
+        }
+        if (postData.name !== undefined){
+            updatedEventPost.name = postData.name;
+        }
+        if (postData.capacity !== undefined){
+            updatedEventPost.capacity = postData.capacity;
+        }
+        if (postData.registrationCount !== undefined){
+            updatedEventPost.registrationCount = postData.registrationCount;
+        }
+        if (postData.date !== undefined){
+            updatedEventPost.date = new Date(postData.date);
+        }
+        if (postData.status !== undefined){
+            updatedEventPost.status = postData.status;
+        }
+        if (postData.category !== undefined){
+            updatedEventPost.category = postData.category;
+        } 
 
-        if(postData.userId !== undefined) {
-            updatedPost.userId = postData.userId;
+        if (Object.keys(updatedEventPost).length === 0) {
+            throw new Error("No valid fields provided for update");
         }
 
-        if(postData.content !== undefined) {
-            updatedPost.content = postData.content;
-        }
+        updatedEventPost.updatedAt = new Date();
 
-        if (Object.keys(updatedPost).length === 0) {
-            throw new Error("No fields provided to update");
-        }
-        
-        updatedPost.updatedAt = new Date();
-
-        // update the document 
-        await firestoreRepository.updateDocument<Post>(
-            COLLECTION,
-            id,
-            updatedPost
-        );
-
-        // retrieve the updated post document
-        const updatedPostData = await firestoreRepository.getDocById<Post>(COLLECTION, id);
-
-        if(!updatedPostData){
-            throw new Error("Updated post couldn't be found");
-        }
-
-        return updatedPostData;
-
+        await firestoreRepository.updateDocument<EventPost>(COLLECTION, postData.id, updatedEventPost);
+        const updatedPost = await firestoreRepository.getDocById<EventPost>(COLLECTION, postData.id);
+        if (!updatedPost) {
+            throw new Error("Post not found after update");
+        }   
+        return updatedPost;
 
     } catch (error: unknown) {
         const errorMessage =
             error instanceof Error ? error.message : "Unknown error";
         throw new Error(
-            `Failed to update post ${id}: ${errorMessage}`
+            `Failed to update post: ${errorMessage}`
         );
     }
 };
 
-
-// retreiveing a post by ID
-export const deletePost = async (id: string): Promise<void> => {
+export const deleteEvent = async (id: string): Promise<void> => {
     try {
         await firestoreRepository.deleteDocument(COLLECTION, id);
-       
     } catch (error: unknown) {
         const errorMessage =
             error instanceof Error ? error.message : "Unknown error";
         throw new Error(
-            `Failed to delete the post: ${errorMessage}`
+            `Failed to delete post: ${errorMessage}`
         );
-    }
+    }       
 };
-
-export function updateEvent(arg0: any) {
-    throw new Error("Function not implemented.");
-}

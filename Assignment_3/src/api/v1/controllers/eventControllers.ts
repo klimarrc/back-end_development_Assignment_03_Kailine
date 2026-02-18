@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import * as postService from "../services/eventPostService";
 import { successResponse } from "../models/responseModel";
+import { EventPost } from "../models/eventPostModel";
 
 /**
  * Handles updating a post.
@@ -46,11 +47,26 @@ export const createPostHandler = async (
     next: NextFunction  
 ): Promise<void> => {
     try {
-        const newPost = await postService.createPost(req.body); 
-        res.status(201).json(successResponse(newPost, "Event created"));
+       const{id, name, date, capacity, registrationCount, status, category} = req.body;
+       const createdAt = new Date().toISOString();
+       const updatedAt = new Date().toISOString();
+
+       const postData: Partial<EventPost> = {
+        id,
+        name,
+        date,
+        capacity,
+        registrationCount,
+        status,
+        category,
+        createdAt,
+        updatedAt
+       };
+       const postResponde = await postService.createEventPost(postData as EventPost);
+       res.status(201).json(successResponse(postResponde, "Event created"));
     } catch (error: unknown) {
         next(error);
-    }
+    }   
 };
 
 export const deletePostHandler = async (
@@ -62,20 +78,6 @@ export const deletePostHandler = async (
         const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
         await postService.deletePost(id);
         res.status(200).json(successResponse("", "Event deleted"));
-    } catch (error: unknown) {
-        next(error);
-    }
-};
-
-export const updateEvent = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-): Promise<void> => {
-    try {
-        const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
-        await postService.updateEvent({ id, ...req.body });
-        res.status(200).json(successResponse("", "Event updated"));
     } catch (error: unknown) {
         next(error);
     }

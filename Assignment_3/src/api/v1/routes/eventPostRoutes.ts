@@ -1,21 +1,46 @@
-iimport express from "express";
+import express from "express";
 import { validateRequest } from "../middleware/validate";
-import * as postController from "../controllers/eventControllers";
+import * as postController from "../controller/eventPostController";
 import { postSchemas } from "../validation/eventPostSchemas";
 
 const router = express.Router();
 
-// Create a new event post
-router.post("/", validateRequest({ body: postSchemas.createPostSchema }), postController.createEventPost);
-// Get all event posts
-router.get("/", postController.getAllEventPosts);
-// Get a specific event post by ID
-router.get("/:id", postController.getEventPostById);
-// Update an existing event post
-router.put("/:id", validateRequest({ body: postSchemas.updatePostSchema }), postController.updateEventPost);
-// Delete an event post
-router.delete("/:id", postController.deleteEventPost);
+// Create post - validates body only
+router.post(
+    "/",
+    validateRequest(postSchemas.,
+    postController.createPost
+);
 
+// Get single post - validates params and optional query
+router.get(
+    "/:id",
+    validateRequest(postSchemas.getById.name("GetPostById")),
+    postController.getPost
+);
 
+// Update post - validates both params and body
+router.put(
+    "/:id",
+    validateRequest(postSchemas.update),
+    postController.updatePost
+);
+
+// Delete post - validates params only
+router.delete(
+    "/:id",
+    validateRequest(postSchemas.delete),
+    postController.deletePost
+);
+
+// List posts - validates query parameters for filtering/pagination
+router.get("/", validateRequest(postSchemas.list), postController.listPosts);
+
+// Example with custom validation options
+router.post(
+    "/flexible",
+    validateRequest(postSchemas.create, { stripBody: false }),
+    postController.createPostFlexible
+);
 
 export default router;

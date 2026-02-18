@@ -4,11 +4,11 @@ export type EventCategory = "general" | "conference" | "workshop" | "meetup";
 export interface EventPost {
     id: string;
     name: string;
-    date: string;
+    date: Date;
     capacity?: number;
     registrationCount: number;
     status: EventStatus;
     category: EventCategory;
-    createdAt: string;
-    updatedAt: string;
+    createdAt: Date;
+    updatedAt: Date;
 }
