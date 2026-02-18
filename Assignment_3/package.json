@@ -10,8 +10,6 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage"
   },
-
-
   "repository": {
     "type": "git",
     "url": "git+https://github.com/klimarrc/back-end_development_Assignment_03_Kailine.git"
