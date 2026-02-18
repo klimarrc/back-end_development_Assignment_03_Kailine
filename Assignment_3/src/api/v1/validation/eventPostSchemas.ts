@@ -9,62 +9,70 @@ export const postSchemas = {
         .min(3)
         .max(100)
         .required()
+        .default("Untitled Event")
         .messages({
             "string.base": "Name must be a string",
             "string.empty": "Name is required",
             "string.min": "Name must be at least 3 characters",
             "string.max": "Name must be at most 100 characters",
-            "any.required": "Name is required"
+            "any.required": "Name is required",
         }),
+
         date: Joi
+        .string()
         .isoDate()
         .required()
+        .default(() => new Date().toISOString())
         .messages({
-            "date.base": "Date must be a valid date",
+            "string.base": "Date must be a string in ISO format",
+            "string.empty": "Date is required",
+            "string.isoDate": "Date must be in ISO format (YYYY-MM-DDTHH:mm:ss.sssZ)",
             "any.required": "Date is required",
-            "string.isoDate": "Date must be in ISO format (YYYY-MM-DD)"
-        }),
+        }), 
+
         capacity: Joi
         .number()
         .integer()
-        .min(0)
-        .max(10000)
-        .optional()
+        .min(5)
+        .default(0)
         .messages({
-            "any.required": "Capacity is required",
             "number.base": "Capacity must be a number",
             "number.integer": "Capacity must be an integer",
-            "number.min": "Capacity must be a positive number"
+            "number.min": "Capacity must be at least 5",
         }),
+
         registrationCount: Joi
         .number()
         .integer()
         .min(0)
-        .required()
+        .default(0)
         .messages({
-            "any.required": "Registration count is required",
             "number.base": "Registration count must be a number",
             "number.integer": "Registration count must be an integer",
-            "number.min": "Registration count must be a positive number"
-        }),
+            "number.min": "Registration count cannot be negative",
+        }), 
+
         status: Joi
         .string()
-        .valid("active", "cancelled", "completed")
-        .required()
+        .valid("active", "inactive", "cancelled")
+        .default("active")
         .messages({
-            "any.required": "Status is required",
-            "string.base": "Status must be a string",   
-            "any.only": "Status must be one of 'active', 'cancelled', or 'completed'"
-        }),
+            "string.base": "Status must be a string",
+            "string.empty": "Status is required",
+            "any.only": "Status must be one of 'active', 'inactive', or 'cancelled'",
+        }), 
+
         category: Joi
         .string()
-        .valid("conference", "workshop", "seminar", "webinar")
+        .valid("general", "conference", "workshop", "meetup")
+        .default("general")
         .required()
         .messages({
-            "any.required": "Category is required",
             "string.base": "Category must be a string",
-            "any.only": "Category must be one of 'conference', 'workshop', 'seminar', or 'webinar'"
-        }),                                                         
-    }
+            "string.empty": "Category is required",
+            "any.only": "Category must be one of 'general', 'conference', 'workshop', or 'meetup'",
+            "any.required": "Category is required",
+        })      
+    },
 };  
         

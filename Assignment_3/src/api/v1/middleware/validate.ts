@@ -32,7 +32,7 @@ export const validateRequest = (
     const defaultOptions = {
         stripBody: true,
         stripQuery: true,
-        stripParams: false,
+        stripParams: true,
         ...options,
     };
 
@@ -75,30 +75,34 @@ export const validateRequest = (
 
             // Validate each request part if schema is provided
             if (schemas.body) {
-                req.body = validatePart(
+               const value = validatePart(
                     schemas.body,
                     req.body,
                     "Body",
                     defaultOptions.stripBody
                 );
+                Object.assign(req.body, value);
             }
 
             if (schemas.params) {
-                req.params = validatePart(
+                const value = validatePart(
                     schemas.params,
                     req.params,
                     "Params",
                     defaultOptions.stripParams
                 );
+
+                Object.assign(req.params, value);
             }
 
             if (schemas.query) {
-                req.query = validatePart(
+                const value = validatePart(
                     schemas.query,
                     req.query,
                     "Query",
                     defaultOptions.stripQuery
                 );
+                Object.assign(req.query, value);
             }
 
             // If there are any validation errors, return them

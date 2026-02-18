@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { validateRequest } from "./path-to-middleware";
+import { validateRequest } from "../src/api/v1/middleware/validate";
 import Joi from "joi";
 
 describe("validateRequest Middleware", () => {
@@ -25,7 +25,7 @@ describe("validateRequest Middleware", () => {
         const testSchemas = {
             body: Joi.object({
                 name: Joi.string().required(),
-                age: Joi.number().integer().min(0).max(5000),
+                
             }),
         };
         mockReq.body = { name: "Duncan MacLeod", age: 400 };

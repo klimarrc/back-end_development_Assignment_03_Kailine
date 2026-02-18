@@ -21,5 +21,7 @@ app.get("/api/v1/health", (req, res) => {
     });
 });
 
+app.use(errorHandler);
+
 // Export the app
 export default app;

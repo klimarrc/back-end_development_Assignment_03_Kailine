@@ -2,7 +2,7 @@ import { initializeApp, cert, ServiceAccount } from "firebase-admin/app";
 import { getFirestore, Firestore } from "firebase-admin/firestore";
 
 // update with your won firebase private key .json file path
-import * as serviceAccount from "../backend-demo-5757f-firebase-adminsdk-fbsvc-a2e2d9da60.json";
+import * as serviceAccount from "./path-to-your-firebase-service-account.json";
 
 // Initialize the Firebase app with the service account credentials
 // This step is necessary before you can use any Firebase services
