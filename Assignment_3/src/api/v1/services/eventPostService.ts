@@ -64,7 +64,7 @@ export const getPostById = async (id: string): Promise<EventPost> => {
     }
 };
 
-export const updateEvent = async (postData:
+export const updatePostEvent = async (postData:
     {id: string,
      name: string,
      capacity: number,
@@ -118,7 +118,7 @@ export const updateEvent = async (postData:
     }
 };
 
-export const deleteEvent = async (id: string): Promise<void> => {
+export const deletePostEvent = async (id: string): Promise<void> => {
     try {
         await firestoreRepository.deleteDocument(COLLECTION, id);
     } catch (error: unknown) {
