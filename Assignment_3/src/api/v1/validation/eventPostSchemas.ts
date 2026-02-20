@@ -21,15 +21,14 @@ export const postSchemas = {
           "any.required": "\"name\" is required",
         }),
 
-      date: Joi.string()
-        .isoDate()
+      date: Joi.date()
+        .iso()
         .min("now")
         .required()
         .messages({
-          "string.min": "\"date\" must be greater then \"now\"",
-          "string.base": "\"date\" must be a string in ISO format",
-          "string.empty": "\"date\" is required",
-          "string.isoDate": "\"date\" must be in ISO format (YYYY-MM-DDTHH:mm:ss.sssZ)",
+          "date.min": "\"date\" must be greater than \"now\"",
+          "date.base": "\"date\" must be a valid date",
+          "date.empty": "\"date\" is required",
           "any.required": "\"date\" is required",
         }),
 
