@@ -5,11 +5,12 @@ import { db } from "../../../../config/firebaseConfig";
 // Create a new document in a collection
 export const createEventDocument = async <T>(
   collectionName: string,
+  id: string,
   data: Partial<T>
 ): Promise<string> => {
   try {
-    const docRef = await db.collection(collectionName).add(data);
-    return docRef.id;
+    await db.collection(collectionName).doc(id).set(data);
+    return id;
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : "Unknown error";
     throw new Error(`Failed to create document in ${collectionName}: ${errorMessage}`);

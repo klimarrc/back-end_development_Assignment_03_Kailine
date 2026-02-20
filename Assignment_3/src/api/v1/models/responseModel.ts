@@ -1,6 +1,6 @@
 export interface Apiresponse<T> {
-    data?: T;
     message?: string;
+    data?: T;
     error?: string;
     code?: number;
   } 
@@ -8,6 +8,7 @@ export interface Apiresponse<T> {
   export const successResponse = <T>(
     data: T, message?: string
   ): Apiresponse<T> => ({
-    data,
     message,
+    data,
+   
   });

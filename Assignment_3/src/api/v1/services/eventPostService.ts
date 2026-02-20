@@ -1,9 +1,10 @@
+import { db } from "../../../../config/firebaseConfig";
 import { EventCategory, events, EventStatus } from "../models/eventPostModel";
 import * as firestoreRepository from "../repositories/firestoreRepository";
 const COLLECTION = "posts";
 
 export const createEventPost = async (postData: 
-    {id: string,
+    {
      name: string,
      capacity: number,
      registrationCount: number,
@@ -13,15 +14,19 @@ export const createEventPost = async (postData:
     
      
     try {
+        const count = (await db.collection(COLLECTION).get()).size;
+        const id = `evt_${String(count + 1).padStart(6, "0")}`;
+
         const newEventPost = {
+            id,
             ...postData,
             date: new Date(postData.date),  
             createdAt: new Date(),
             updatedAt: new Date(),
         }
 
-        const createdId = await firestoreRepository.createEventDocument<events>(COLLECTION, newEventPost);
-        return {...newEventPost, id: createdId}
+        await firestoreRepository.createEventDocument<events>(COLLECTION, id, newEventPost);
+        return newEventPost;
     } catch (error: unknown) {
         const errorMessage =
             error instanceof Error ? error.message : "Unknown error";
