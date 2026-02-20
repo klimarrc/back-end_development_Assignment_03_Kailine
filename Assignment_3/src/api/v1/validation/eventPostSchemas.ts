@@ -16,7 +16,7 @@ export const postSchemas = {
         .messages({
           "string.base": "Name must be a string",
           "string.empty": "Name is required",
-          "string.min": "Name must be at least 3 characters",
+          "string.min": "Name must be at least 3 characters long",
           "string.max": "Name must be at most 100 characters",
           "any.required": "Name is required",
         }),

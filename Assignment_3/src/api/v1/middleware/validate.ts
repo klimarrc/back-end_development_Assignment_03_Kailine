@@ -43,17 +43,12 @@ export const validateRequest = (
                     abortEarly: false,
                     stripUnknown: shouldStrip,
                 });
-
                 if (error) {
-                    errors.push(
-                        ...error.details.map(
-                            (detail) => `${partName}: ${detail.message}`
-                        )
-                    );
-                } else if (shouldStrip) {
-                    return value;
+         
+                    errors.push(...error.details.map((d) => d.message));
                 }
-                return data;
+
+                return shouldStrip ? value : data;
             };
 
             // Validate each request part if schema is provided
