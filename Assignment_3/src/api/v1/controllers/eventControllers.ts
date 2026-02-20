@@ -33,7 +33,7 @@ export const getAllPostsHandler = async (
     next: NextFunction
 ): Promise<void> => {
     try {
-        const posts = await postService.getAllEventPosts();
+        const posts: EventPost[] = await postService.getAllEventPosts();
         res.status(HTTP_STATUS.OK).json(successResponse(posts));
     } catch (error: unknown) {
         next(error);
@@ -68,8 +68,8 @@ export const updatePostHandler = async (
             capacity: updatedData.capacity ?? 0,
             registrationCount: updatedData.registrationCount ?? 0,
             date: updatedData.date ?? new Date(),   
-            status: updatedData.status ?? "upcoming",
-            category: updatedData.category ?? "other"
+            status: updatedData.status!,
+            category: updatedData.category!
         });
         if (updatedPost) {
             res.status(HTTP_STATUS.OK).json(successResponse(updatedPost, "Event updated successfully"));

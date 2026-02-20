@@ -24,8 +24,8 @@ export const createEventPost = async (postData:
             updatedAt: new Date(),
         }
 
-        const id = await firestoreRepository.createDocument<EventPost>(COLLECTION, newEventPost);
-        return {id, ...newEventPost}
+        const createdId = await firestoreRepository.createEvent<EventPost>(COLLECTION, newEventPost);
+        return {...newEventPost, id: createdId}
     } catch (error: unknown) {
         const errorMessage =
             error instanceof Error ? error.message : "Unknown error";
@@ -37,7 +37,7 @@ export const createEventPost = async (postData:
 
 export const getAllEventPosts = async (): Promise<EventPost[]> => {
     try {
-        const posts = await firestoreRepository.getAllDocuments<EventPost>(COLLECTION);
+        const posts = await firestoreRepository.getAllEvents<EventPost>(COLLECTION);
         return posts;
     } catch (error: unknown) {
         const errorMessage =
@@ -50,7 +50,7 @@ export const getAllEventPosts = async (): Promise<EventPost[]> => {
 
 export const getPostById = async (id: string): Promise<EventPost> => {
     try {
-        const post = await firestoreRepository.getDocById<EventPost>(COLLECTION, id);
+        const post = await firestoreRepository.getEventById<EventPost>(COLLECTION, id);
         if (!post) {
             throw new Error("Post not found");
         }   
@@ -102,8 +102,8 @@ export const updatePostEvent = async (postData:
 
         updatedEventPost.updatedAt = new Date();
 
-        await firestoreRepository.updateDocument<EventPost>(COLLECTION, postData.id, updatedEventPost);
-        const updatedPost = await firestoreRepository.getDocById<EventPost>(COLLECTION, postData.id);
+        await firestoreRepository.updatePostEvent<EventPost>(COLLECTION, postData.id, updatedEventPost);
+        const updatedPost = await firestoreRepository.getEventById<EventPost>(COLLECTION, postData.id);
         if (!updatedPost) {
             throw new Error("Post not found after update");
         }   
@@ -120,7 +120,7 @@ export const updatePostEvent = async (postData:
 
 export const deletePostEvent = async (id: string): Promise<void> => {
     try {
-        await firestoreRepository.deleteDocument(COLLECTION, id);
+        await firestoreRepository.deletePostEvent(COLLECTION, id);
     } catch (error: unknown) {
         const errorMessage =
             error instanceof Error ? error.message : "Unknown error";

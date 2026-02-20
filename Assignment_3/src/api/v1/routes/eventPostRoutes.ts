@@ -27,7 +27,7 @@ router.get(
 router.put(
     "/:id",
     validateRequest(postSchemas.update),
-    postController.updateEventHandler
+    postController.updatePostHandler
 );
 
 // Delete post - validates params only
@@ -36,6 +36,5 @@ router.delete(
     validateRequest(postSchemas.delete),
     postController.deletePostHandler
 );
-
 
 export default router;
