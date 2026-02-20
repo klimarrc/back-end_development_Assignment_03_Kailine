@@ -45,11 +45,13 @@ export const postSchemas = {
       registrationCount: Joi.number()
         .integer()
         .min(0)
+        .max(100)
         .default(0)
         .messages({
           "number.base": "\"registrationCount\" must be a number",
           "number.integer": "\"registrationCount\" must be an integer",
           "number.min": "\"registrationCount\" cannot be negative",
+          "number.max": "\"registrationCount\" must be less than or equal to ref:capacity",
         }),
 
       status: Joi.string()
