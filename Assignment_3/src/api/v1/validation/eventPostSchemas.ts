@@ -23,6 +23,7 @@ export const postSchemas = {
 
       date: Joi.string()
         .isoDate()
+        .min(Joi.ref("now"))
         .required()
         .messages({
           "string.base": "\"date\" must be a string in ISO format",
