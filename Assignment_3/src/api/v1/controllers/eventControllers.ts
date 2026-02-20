@@ -1,8 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import * as postService from "../services/eventPostService";
 import { successResponse } from "../models/responseModel";
-import { EventPost } from "../models/eventPostModel";
-import { HTTP_STATUS } from "src/constants/httpConstants";
+import { events} from "../models/eventPostModel";
+import { HTTP_STATUS } from "../../../constants/httpConstants";
+
 
 // Create post handler - validates body only
 export const createPostHandler = async (
@@ -10,18 +11,9 @@ export const createPostHandler = async (
     res: Response,  
     next: NextFunction  
 ): Promise<void> => {
-    try {
-        const newPostData = req.body as EventPost;
-        const newPost = await postService.createEventPost({
-            id: newPostData.id,
-            name: newPostData.name,
-            capacity: newPostData.capacity ?? 0,
-            registrationCount: newPostData.registrationCount ?? 0,
-            date: newPostData.date,
-            status: newPostData.status,
-            category: newPostData.category
-        });
-        res.status(HTTP_STATUS.CREATED).json(successResponse(newPost, "Event created successfully"));
+    try{
+        const events =await postService.createEventPost(req.body);
+        res.status(HTTP_STATUS.CREATED).json(successResponse(events, "Event created successfully"));
     } catch (error: unknown) {
         next(error);
     }
@@ -33,8 +25,8 @@ export const getAllPostsHandler = async (
     next: NextFunction
 ): Promise<void> => {
     try {
-        const posts: EventPost[] = await postService.getAllEventPosts();
-        res.status(HTTP_STATUS.OK).json(successResponse(posts));
+        const events: events[] = await postService.getAllEventPosts();
+        res.status(HTTP_STATUS.OK).json(successResponse(events));
     } catch (error: unknown) {
         next(error);
     }
@@ -47,8 +39,8 @@ export const getPostByIdHandler = async (
 ): Promise<void> => {
     try {
         const {id} = req.params;
-        const post = await postService.getPostById(id as string);
-        res.status(HTTP_STATUS.OK).json(successResponse({post}, "Event retrieved successfully"));
+        const events = await postService.getPostById(id as string);
+        res.status(HTTP_STATUS.OK).json(successResponse(events, "Event retrieved successfully"));
     } catch (error: unknown) {
         next(error);    
     }
@@ -61,7 +53,7 @@ export const updatePostHandler = async (
 ): Promise<void> => {
     try {
         const {id} = req.params;
-        const updatedData = req.body as Partial<EventPost>;
+        const updatedData = req.body as Partial<events>;
         const updatedPost = await postService.updatePostEvent({ 
             id: id as string,
             name: updatedData.name ?? "",

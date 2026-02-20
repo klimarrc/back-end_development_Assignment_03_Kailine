@@ -1,7 +1,7 @@
 export type EventStatus = "active" | "cancelled" | "completed";
 export type EventCategory = "general" | "conference" | "workshop" | "meetup";
 
-export interface EventPost {
+export interface events {
     id: string;
     name: string;
     date: Date;

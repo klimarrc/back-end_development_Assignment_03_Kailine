@@ -1,6 +1,6 @@
 import * as postService from '../src/api/v1/services/eventPostService';
 import * as firestoreRepository from '../src/api/v1/repositories/firestoreRepository';
-import { EventCategory, EventStatus } from 'src/api/v1/models/eventPostModel';
+import { EventCategory, EventStatus } from '../src/api/v1/models/eventPostModel';
 
 // Mock the repository module
 jest.mock('../src/api/v1/repositories/firestoreRepository');
@@ -28,13 +28,13 @@ describe('Post Services', () => {
         id: "event-1"
       };
 
-      (firestoreRepository.createEvent as jest.Mock).mockResolvedValue(mockRepositoryResponse);
+      (firestoreRepository.createEventDocument as jest.Mock).mockResolvedValue(mockRepositoryResponse);
 
       // Act
       const result = await postService.createEventPost(mockInput);
 
       // Assert
-      expect(firestoreRepository.createEvent).toHaveBeenCalledWith("posts", 
+      expect(firestoreRepository.createEventDocument).toHaveBeenCalledWith("posts", 
             expect.objectContaining({
                 id: mockInput.id,
                 name: mockInput.name,
@@ -48,7 +48,7 @@ describe('Post Services', () => {
 
       expect(result).toEqual(
         {
-            id: mockRepositoryResponse,
+            id: mockRepositoryResponse.id,
             createdAt: expect.any(Date),
             updatedAt: expect.any(Date)
         }
@@ -75,13 +75,13 @@ describe('Post Services', () => {
             updatedAt: new Date()
       }];
 
-      (firestoreRepository.getAllEvents as jest.Mock).mockResolvedValue(mockRepositoryResponse);
+      (firestoreRepository.getAllEventDocuments as jest.Mock).mockResolvedValue(mockRepositoryResponse);
 
       // Act
       const result = await postService.getAllEventPosts();
 
       // Assert - call firestore repository function with the collection name
-      expect(firestoreRepository.getAllEvents).toHaveBeenCalledWith("posts");
+      expect(firestoreRepository.getAllEventDocuments).toHaveBeenCalledWith("posts");
 
       // expected eresults should be an array matching with the mockRepositoryResponse
       expect(result).toEqual(mockRepositoryResponse);
