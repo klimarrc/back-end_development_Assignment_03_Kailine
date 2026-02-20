@@ -14,21 +14,21 @@ export const postSchemas = {
         .max(100)
         .required()
         .messages({
-          "string.base": "Name must be a string",
-          "string.empty": "Name is required",
-          "string.min": "Name must be at least 3 characters long",
-          "string.max": "Name must be at most 100 characters",
-          "any.required": "Name is required",
+          "string.base": "\"name\" must be a string",
+          "string.empty": "\"name\" is required",
+          "string.min": "\"name\" length must be at least 3 characters long",
+          "string.max": "\"name\" length must be at most 100 characters long",
+          "any.required": "\"name\" is required",
         }),
 
       date: Joi.string()
         .isoDate()
         .required()
         .messages({
-          "string.base": "Date must be a string in ISO format",
-          "string.empty": "Date is required",
-          "string.isoDate": "Date must be in ISO format (YYYY-MM-DDTHH:mm:ss.sssZ)",
-          "any.required": "Date is required",
+          "string.base": "\"date\" must be a string in ISO format",
+          "string.empty": "\"date\" is required",
+          "string.isoDate": "\"date\" must be in ISO format (YYYY-MM-DDTHH:mm:ss.sssZ)",
+          "any.required": "\"date\" is required",
         }),
 
       capacity: Joi.number()
@@ -36,10 +36,10 @@ export const postSchemas = {
         .min(5)
         .required()
         .messages({
-          "number.base": "Capacity must be a number",
-          "number.integer": "Capacity must be an integer",
-          "number.min": "Capacity must be at least 5",
-          "any.required": "Capacity is required",
+          "number.base": "\"capacity\" must be a number",
+          "number.integer": "\"capacity\" must be an integer",
+          "number.min": "\"capacity\" must be greater than or equal to 5",
+          "any.required": "\"capacity\" is required",
         }),
 
       registrationCount: Joi.number()
@@ -47,25 +47,25 @@ export const postSchemas = {
         .min(0)
         .default(0)
         .messages({
-          "number.base": "Registration count must be a number",
-          "number.integer": "Registration count must be an integer",
-          "number.min": "Registration count cannot be negative",
+          "number.base": "\"registrationCount\" must be a number",
+          "number.integer": "\"registrationCount\" must be an integer",
+          "number.min": "\"registrationCount\" cannot be negative",
         }),
 
       status: Joi.string()
         .valid("active", "inactive", "cancelled")
         .default("active")
         .messages({
-          "string.base": "Status must be a string",
-          "any.only": "Status must be one of 'active', 'inactive', or 'cancelled'",
+          "string.base": "\"status\" must be a string",
+          "any.only": "\"status\" must be one of 'active', 'inactive', or 'cancelled'",
         }),
 
       category: Joi.string()
         .valid("general", "conference", "workshop", "meetup")
         .default("general")
         .messages({
-          "string.base": "Category must be a string",
-          "any.only": "Category must be one of 'general', 'conference', 'workshop', or 'meetup'",
+          "string.base": "\"category\" must be a string",
+          "any.only": "\"category\" must be one of 'general', 'conference', 'workshop', or 'meetup'",
         }),
     }),
   },
@@ -77,9 +77,9 @@ export const postSchemas = {
   getById: {
     params: Joi.object({
       id: Joi.string().required().messages({
-        "string.base": "ID must be a string",
-        "string.empty": "ID is required",
-        "any.required": "ID is required",
+        "string.base": "\"id\" must be a string",
+        "string.empty": "\"id\" is required",
+        "any.required": "\"id\" is required",
       }),
     }),
   },
@@ -88,17 +88,17 @@ export const postSchemas = {
   update: {
     params: Joi.object({
       id: Joi.string().required().messages({
-        "string.base": "ID must be a string",
-        "string.empty": "ID is required",
-        "any.required": "ID is required",
+        "string.base": "\"id\" must be a string",
+        "string.empty": "\"id\" is required",
+        "any.required": "\"id\" is required",
       }),
     }),
     body: Joi.object({
       name: Joi.string().min(3).max(100).optional().messages({
-        "string.base": "Name must be a string",
-        "string.empty": "Name cannot be empty",
-        "string.min": "Name must be at least 3 characters",
-        "string.max": "Name must be at most 100 characters",
+        "string.base": "\"name\" must be a string",
+        "string.empty": "\"name\" cannot be empty",
+        "string.min": "\"name\" must be at least 3 characters",
+        "string.max": "\"name\" must be at most 100 characters",
       }),
 
       date: Joi.string().isoDate().optional().messages({

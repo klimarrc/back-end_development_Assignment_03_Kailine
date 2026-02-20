@@ -36,7 +36,6 @@ export const validateRequest = (
             const validatePart = (
                 schema: ObjectSchema,
                 data: any,
-                partName: string,
                 shouldStrip: boolean
             ) => {
                 const { error, value } = schema.validate(data, {
@@ -44,7 +43,6 @@ export const validateRequest = (
                     stripUnknown: shouldStrip,
                 });
                 if (error) {
-         
                     errors.push(...error.details.map((d) => d.message));
                 }
 
@@ -53,37 +51,20 @@ export const validateRequest = (
 
             // Validate each request part if schema is provided
             if (schemas.body) {
-               const value = validatePart(
-                    schemas.body,
-                    req.body,
-                    "Body",
-                    defaultOptions.stripBody
-                );
-                Object.assign(req.body, value);
+                const value = validatePart(schemas.body, req.body ?? {}, defaultOptions.stripBody);
+                req.body = value;
             }
 
             if (schemas.params) {
-                const value = validatePart(
-                    schemas.params,
-                    req.params,
-                    "Params",
-                    defaultOptions.stripParams
-                );
-
-                Object.assign(req.params, value);
+                const value = validatePart(schemas.params, req.params ?? {}, defaultOptions.stripParams);
+                req.params = value;
             }
 
             if (schemas.query) {
-                const value = validatePart(
-                    schemas.query,
-                    req.query,
-                    "Query",
-                    defaultOptions.stripQuery
-                );
-                Object.assign(req.query, value);
+                const value = validatePart(schemas.query, req.query ?? {}, defaultOptions.stripQuery);
+                req.query = value;
             }
 
-            // If there are any validation errors, return them
             if (errors.length > 0) {
                 return res.status(HTTP_STATUS.BAD_REQUEST).json({
                     error: `Validation error: ${errors.join(", ")}`,
@@ -92,7 +73,7 @@ export const validateRequest = (
 
             next();
         } catch (error: unknown) {
-            res.status(HTTP_STATUS.BAD_REQUEST).json({
+            return res.status(HTTP_STATUS.BAD_REQUEST).json({
                 error: (error as Error).message,
             });
         }
