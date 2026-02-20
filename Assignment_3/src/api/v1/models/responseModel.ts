@@ -1,5 +1,4 @@
 export interface Apiresponse<T> {
-    status: string;
     data?: T;
     message?: string;
     error?: string;
@@ -9,7 +8,6 @@ export interface Apiresponse<T> {
   export const successResponse = <T>(
     data: T, message?: string
   ): Apiresponse<T> => ({
-    status: "success",
     data,
-    message
+    message,
   });
