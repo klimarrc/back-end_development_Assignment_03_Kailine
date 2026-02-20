@@ -13,7 +13,7 @@ export const createPostHandler = async (
 ): Promise<void> => {
     try{
         const events =await postService.createEventPost(req.body);
-        res.status(HTTP_STATUS.CREATED).json(successResponse(events, "Event created successfully"));
+        res.status(HTTP_STATUS.CREATED).json(successResponse(events, "Event created"));
     } catch (error: unknown) {
         next(error);
     }
