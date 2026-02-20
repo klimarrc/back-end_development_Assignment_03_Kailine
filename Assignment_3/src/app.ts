@@ -3,6 +3,7 @@ import eventPostRoutes from "./api/v1/routes/eventPostRoutes";
 import morgan from "morgan";
 
 
+
 const app: Express = express();
 app.set("json spaces", 2); // set JSON response indentation to 2 spaces for readability
 

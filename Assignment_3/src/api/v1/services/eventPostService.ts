@@ -1,11 +1,9 @@
 import { EventCategory, EventPost, EventStatus } from "../models/eventPostModel";
 import * as firestoreRepository from "../repositories/firestoreRepository";
-import { postSchemas } from "../validation/eventPostSchemas";
-import { validateRequest } from "../middleware/validate";
-import { date } from "node_modules/joi/lib";
 
 
 const COLLECTION = "posts";
+
 export const createEventPost = async (postData: 
     {id: string,
      name: string,
