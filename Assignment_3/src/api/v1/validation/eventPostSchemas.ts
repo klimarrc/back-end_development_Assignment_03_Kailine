@@ -57,7 +57,7 @@ export const postSchemas = {
         .default("active")
         .messages({
           "string.base": "\"status\" must be a string",
-          "any.only": "\"status\" must be one of 'active', 'inactive', or 'cancelled'",
+          "any.only": "\"status\" must be one of ['active', 'cancelled' completed']",
         }),
 
       category: Joi.string()
