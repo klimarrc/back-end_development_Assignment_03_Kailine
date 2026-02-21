@@ -1,9 +1,24 @@
+// Mock the repository module
+jest.mock('../src/api/v1/repositories/firestoreRepository');
+
+// Mock the Firebase configuration to avoid actual database calls
+jest.mock('../config/firebaseConfig', () => {
+  const getMock = jest.fn().mockResolvedValue({ size: 5 });
+  const collectionMock = jest.fn(() => ({ get: getMock }));
+
+  return {
+    db: {
+      collection: collectionMock,
+    },
+  };
+});
+
+
 import * as postService from '../src/api/v1/services/eventPostService';
 import * as firestoreRepository from '../src/api/v1/repositories/firestoreRepository';
 import { EventCategory, EventStatus } from '../src/api/v1/models/eventPostModel';
 
-// Mock the repository module
-jest.mock('../src/api/v1/repositories/firestoreRepository');
+
 
 describe('Post Services', () => {
   beforeEach(() => {
@@ -14,8 +29,7 @@ describe('Post Services', () => {
     // test case # 1
     it('should create a new post successfully', async () => {
       // Arrange
-      const mockInput = { 
-        id: "event-1",
+      const mockInput = {
         name: "Test Event",
         capacity: 100,
         registrationCount: 0,
@@ -24,8 +38,10 @@ describe('Post Services', () => {
         category: "conference" as EventCategory
       };
 
-      const mockRepositoryResponse = { 
-        id: "event-1"
+      const mockRepositoryResponse = {
+        id: "evt_000006"
+
+
       };
 
       (firestoreRepository.createEventDocument as jest.Mock).mockResolvedValue(mockRepositoryResponse);
@@ -34,46 +50,47 @@ describe('Post Services', () => {
       const result = await postService.createEventPost(mockInput);
 
       // Assert
-      expect(firestoreRepository.createEventDocument).toHaveBeenCalledWith("posts", 
-            expect.objectContaining({
-                id: mockInput.id,
-                name: mockInput.name,
-                capacity: mockInput.capacity,
-                registrationCount: mockInput.registrationCount,
-                date: mockInput.date,
-                status: mockInput.status,
-                category: mockInput.category
-            })
-      );
+      expect(firestoreRepository.createEventDocument).toHaveBeenCalledWith("posts", expect.objectContaining({
+        id: expect.any(String),
+        ...mockInput
+      }));
 
-      expect(result).toEqual(
-        {
-            id: mockRepositoryResponse.id,
-            createdAt: expect.any(Date),
-            updatedAt: expect.any(Date)
-        }
-       );
+      expect(result).toEqual({
+        id: expect.any(String),
+        name: mockInput.name,
+        capacity: mockInput.capacity,
+        registrationCount: mockInput.registrationCount,
+        date: mockInput.date,
+        status: mockInput.status,
+        category: mockInput.category,
+        createdAt: expect.any(Date),
+        updatedAt: expect.any(Date)
+      });
+
+      (firestoreRepository.createEventDocument as jest.Mock)
+        .mockResolvedValue("evt_000006");
     });
-   });
+  });
 
-
-   // test case # 2
-   describe('Post Service - GetAllPosts', () => {
+  // test case # 2
+  describe('Post Service - GetAllPosts', () => {
 
     it('should retrieve the list of all posts successfully', async () => {
       // Arrange
-      const mockRepositoryResponse = [ { 
+      const mockRepositoryResponse = [{
         // response should be an array containing all post documents from firestore
-            id: "event-1",
-            name: "Test Event",
-            capacity: 100,
-            registrationCount: 0,
-            date: new Date(),
-            status: "active" as EventStatus,
-            category: "conference" as EventCategory,
-            createdAt: new Date(),
-            updatedAt: new Date()
+        id: "evt_000001"
+        ,
+        name: "Test Event",
+        capacity: 100,
+        registrationCount: 0,
+        date: new Date(),
+        status: "active" as EventStatus,
+        category: "conference" as EventCategory,
+        createdAt: new Date(),
+        updatedAt: new Date()
       }];
+
 
       (firestoreRepository.getAllEventDocuments as jest.Mock).mockResolvedValue(mockRepositoryResponse);
 
@@ -86,5 +103,5 @@ describe('Post Services', () => {
       // expected eresults should be an array matching with the mockRepositoryResponse
       expect(result).toEqual(mockRepositoryResponse);
     });
-   });
+  });
 });

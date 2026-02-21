@@ -12,6 +12,6 @@ router.post("/", validateRequest(postSchemas.create), postController.createPostH
 router.get("/", postController.getAllPostsHandler);
 router.get("/:id", validateRequest(postSchemas.getById), postController.getPostByIdHandler);
 router.put("/:id", validateRequest(postSchemas.update), postController.updatePostHandler);
-router.delete("/:id",validateRequest(postSchemas.delete), postController.deletePostHandler);
+router.delete("/:id", validateRequest(postSchemas.delete), postController.deletePostHandler);
 
 export default router;

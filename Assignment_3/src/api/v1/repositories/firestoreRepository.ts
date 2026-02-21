@@ -5,19 +5,18 @@ import { db } from "../../../../config/firebaseConfig";
 // Create a new document in a collection
 export const createEventDocument = async <T>(
   collectionName: string,
-  id: string,
   data: Partial<T>
 ): Promise<string> => {
   try {
-    await db.collection(collectionName).doc(id).set(data);
-    return id;
+    const docRef = await db.collection(collectionName).add(data);
+    return docRef.id;
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : "Unknown error";
     throw new Error(`Failed to create document in ${collectionName}: ${errorMessage}`);
   }
 };
 
-
+// Get all documents in a collection.
 export const getAllEventDocuments = async <T>(
   collectionName: string
 ): Promise<(T & { id: string })[]> => {
@@ -34,7 +33,7 @@ export const getAllEventDocuments = async <T>(
   }
 };
 
-
+// Get a single document by id.
 export const getEventDocumentById = async <T>(
   collectionName: string,
   id: string
@@ -54,9 +53,8 @@ export const getEventDocumentById = async <T>(
   }
 };
 
-/**
- * Update a document by id.
- */
+
+//Update a document by id.
 export const updatePostEventDoc = async <T>(
   collectionName: string,
   id: string,
@@ -70,6 +68,7 @@ export const updatePostEventDoc = async <T>(
   }
 };
 
+// Delete a document by id.
 export const deletePostEventDoc = async (
   collectionName: string,
   id: string

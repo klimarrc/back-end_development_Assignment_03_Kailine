@@ -3,16 +3,17 @@ import { EventCategory, events, EventStatus } from "../models/eventPostModel";
 import * as firestoreRepository from "../repositories/firestoreRepository";
 const COLLECTION = "posts";
 
-export const createEventPost = async (postData: 
+export const createEventPost = async (postData:
     {
-     name: string,
-     capacity: number,
-     registrationCount: number,
-     date: Date,
-     status: EventStatus,
-     category: EventCategory}): Promise<events> => { 
-    
-     
+        name: string,
+        capacity: number,
+        registrationCount: number,
+        date: Date,
+        status: EventStatus,
+        category: EventCategory
+    }): Promise<events> => {
+
+
     try {
         const count = (await db.collection(COLLECTION).get()).size;
         const id = `evt_${String(count + 1).padStart(6, "0")}`;
@@ -20,12 +21,12 @@ export const createEventPost = async (postData:
         const newEventPost = {
             id,
             ...postData,
-            date: new Date(postData.date),  
+            date: new Date(postData.date),
             createdAt: new Date(),
             updatedAt: new Date(),
         }
 
-        await firestoreRepository.createEventDocument<events>(COLLECTION, id, newEventPost);
+        await firestoreRepository.createEventDocument<events>(COLLECTION, newEventPost);
         return newEventPost;
     } catch (error: unknown) {
         const errorMessage =
@@ -54,8 +55,8 @@ export const getPostById = async (id: string): Promise<events> => {
         const post = await firestoreRepository.getEventDocumentById<events>(COLLECTION, id);
         if (!post) {
             throw new Error("Post not found");
-        }   
-        return post;    
+        }
+        return post;
     } catch (error: unknown) {
         const errorMessage =
             error instanceof Error ? error.message : "Unknown error";
@@ -66,36 +67,38 @@ export const getPostById = async (id: string): Promise<events> => {
 };
 
 export const updatePostEvent = async (postData:
-    {id: string,
-     name: string,
-     capacity: number,
-     registrationCount: number,
-     date: Date,
-     status: EventStatus,
-     category: EventCategory}): Promise<events> => { 
+    {
+        id: string,
+        name: string,
+        capacity: number,
+        registrationCount: number,
+        date: Date,
+        status: EventStatus,
+        category: EventCategory
+    }): Promise<events> => {
     try {
         const updatedEventPost: Partial<events> = {};
-        if (postData.id !== undefined){
+        if (postData.id !== undefined) {
             updatedEventPost.id = postData.id;
         }
-        if (postData.name !== undefined){
+        if (postData.name !== undefined) {
             updatedEventPost.name = postData.name;
         }
-        if (postData.capacity !== undefined){
+        if (postData.capacity !== undefined) {
             updatedEventPost.capacity = postData.capacity;
         }
-        if (postData.registrationCount !== undefined){
+        if (postData.registrationCount !== undefined) {
             updatedEventPost.registrationCount = postData.registrationCount;
         }
-        if (postData.date !== undefined){
+        if (postData.date !== undefined) {
             updatedEventPost.date = new Date(postData.date);
         }
-        if (postData.status !== undefined){
+        if (postData.status !== undefined) {
             updatedEventPost.status = postData.status;
         }
-        if (postData.category !== undefined){
+        if (postData.category !== undefined) {
             updatedEventPost.category = postData.category;
-        } 
+        }
 
         if (Object.keys(updatedEventPost).length === 0) {
             throw new Error("No valid fields provided for update");
@@ -104,15 +107,15 @@ export const updatePostEvent = async (postData:
         updatedEventPost.updatedAt = new Date();
 
         await firestoreRepository.updatePostEventDoc<events>(
-            COLLECTION, 
-            postData.id, 
+            COLLECTION,
+            postData.id,
             updatedEventPost);
 
 
         const updatedPost = await firestoreRepository.getEventDocumentById<events>(COLLECTION, postData.id);
         if (!updatedPost) {
             throw new Error("Post not found after update");
-        }   
+        }
         return updatedPost;
 
     } catch (error: unknown) {
@@ -133,5 +136,5 @@ export const deletePostEvent = async (id: string): Promise<void> => {
         throw new Error(
             `Failed to delete post: ${errorMessage}`
         );
-    }       
+    }
 };
