@@ -26,7 +26,7 @@ export const postSchemas = {
         .min("now")
         .required()
         .messages({
-          "date.min": "\"date\" must be greater than \"now\"",
+          "date.min": "\"date\" must be greater than or equal to now",
           "date.base": "\"date\" must be a valid date",
           "date.empty": "\"date\" is required",
           "any.required": "\"date\" is required",
