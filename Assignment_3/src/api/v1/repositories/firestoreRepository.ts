@@ -1,7 +1,26 @@
 
 import { db } from "../../../../config/firebaseConfig";
+import { Timestamp } from "firebase-admin/firestore";
 
+const tsToIso = (v: any) => {
+  if (v instanceof Timestamp) return v.toDate().toISOString();
 
+  // handles the JSON shape { _seconds, _nanoseconds }
+  if (v && typeof v === "object" && typeof v._seconds === "number") {
+    const ms = v._seconds * 1000 + Math.floor((v._nanoseconds ?? 0) / 1_000_000);
+    return new Date(ms).toISOString();
+  }
+
+  return v;
+};
+
+const normalizeTimestamps = <T extends Record<string, any>>(obj: T): T => {
+  const copy: any = { ...obj };
+  for (const k of Object.keys(copy)) {
+    copy[k] = tsToIso(copy[k]);
+  }
+  return copy;
+};
 // Create a new document in a collection
 export const createEventDocument = async <T>(
   collectionName: string,
@@ -24,8 +43,8 @@ export const getAllEventDocuments = async <T>(
     const snapshot = await db.collection(collectionName).get();
 
     return snapshot.docs.map((doc) => ({
+      ...normalizeTimestamps(doc.data() as T & Record<string, any>),
       id: doc.id,
-      ...(doc.data() as T),
     }));
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : "Unknown error";
@@ -43,10 +62,11 @@ export const getEventDocumentById = async <T>(
 
     if (!snapshot.exists) return null;
 
-    return {
+    return normalizeTimestamps({
       id: snapshot.id,
+
       ...(snapshot.data() as T),
-    };
+    });
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : "Unknown error";
     throw new Error(`Failed to find the document in ${collectionName}: ${errorMessage}`);

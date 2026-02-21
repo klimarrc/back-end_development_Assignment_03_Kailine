@@ -23,10 +23,8 @@ export const postSchemas = {
 
       date: Joi.date()
         .iso()
-        .min("now")
         .required()
         .messages({
-          "date.min": "\"date\" must be greater than or equal to now",
           "date.base": "\"date\" must be a valid date",
           "date.empty": "\"date\" is required",
           "any.required": "\"date\" is required",
@@ -56,11 +54,11 @@ export const postSchemas = {
         }),
 
       status: Joi.string()
-        .valid("active", "inactive", "cancelled")
+        .valid("active", "cancelled", "completed")
         .default("active")
         .messages({
           "string.base": "\"status\" must be a string",
-          "any.only": "\"status\" must be one of ['active', 'cancelled' completed']",
+          "any.only": "\"status\" must be one of ['active', 'cancelled', 'completed']",
         }),
 
       category: Joi.string()
