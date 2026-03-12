@@ -33,7 +33,7 @@ export const postSchemas = {
       capacity: Joi.number()
         .integer()
         .min(5)
-        .required()
+        .optional()
         .messages({
           "number.base": "\"capacity\" must be a number",
           "number.integer": "\"capacity\" must be an integer",
