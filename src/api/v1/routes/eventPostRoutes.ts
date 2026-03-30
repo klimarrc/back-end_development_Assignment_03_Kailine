@@ -1,4 +1,4 @@
-iimport express from "express";
+import express from "express";
 import { validateRequest } from "../middleware/validate";
 import * as postController from "../controllers/eventControllers";
 import { postSchemas } from "../validation/eventPostSchemas";
