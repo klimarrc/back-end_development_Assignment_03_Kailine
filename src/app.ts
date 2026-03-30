@@ -6,12 +6,14 @@ import eventPostRoutes from "./api/v1/routes/eventPostRoutes";
 import morgan from "morgan";
 import { getHelmetConfig } from "../config/helmetConfig";
 import setupSwagger from "../config/swagger";
+import cors from "cors";
+import { getCorsOptions } from "../config/corsConfig";
 
 
 const app: Express = express();
 app.use(getHelmetConfig()); //  use helmet for security headers
 app.set("json spaces", 2); // set JSON response indentation to 2 spaces for readability
-
+app.use(cors(getCorsOptions())); //  use CORS to allow cross-origin requests
 app.use(express.json()); //  use JSON body parsing
 
 

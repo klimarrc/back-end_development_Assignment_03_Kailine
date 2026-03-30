@@ -61,35 +61,6 @@ import Joi from "joi";
  *           description: When the user account was last updated
  *           example: "2024-01-20T14:45:00Z"
  *
- *     Error:
- *       type: object
- *       required:
- *         - error
- *         - message
- *       properties:
- *         error:
- *           type: string
- *           description: A brief description of the error
- *           example: "Bad Request"
- *         message:
- *           type: string
- *           description: A detailed message explaining the error
- *           example: "Invalid request data"
- *         details:
- *           type: array
- *           description: An array of specific validation errors
- *           items:
- *             type: object
- *             properties:
- *               field:
- *                 type: string
- *                 example: "name"
- *               issue:
- *                 type: string
- *                 example: "\"name\" is required"
- *               message:
- *                 type: string
- *                 example: "Invalid request data"
  */
 export const postSchemas = {
   // POST /events - Create new event
@@ -242,3 +213,34 @@ export const postSchemas = {
     }),
   },
 };
+/**
+ *    Error:
+ *       type: object
+ *       required:
+ *         - error
+ *         - message
+ *       properties:
+ *         error:
+ *           type: string
+ *           description: A brief description of the error
+ *           example: "Bad Request"
+ *         message:
+ *           type: string
+ *           description: A detailed message explaining the error
+ *           example: "Invalid request data"
+ *         details:
+ *           type: array
+ *           description: An array of specific validation errors
+ *           items:
+ *             type: object
+ *             properties:
+ *               field:
+ *                 type: string
+ *                 example: "name"
+ *               issue:
+ *                 type: string
+ *                 example: "\"name\" is required"
+ *               message:
+ *                 type: string
+ *                 example: "Invalid request data"
+ */
