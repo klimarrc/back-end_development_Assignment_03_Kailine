@@ -5,9 +5,7 @@ dotenv.config();
 import eventPostRoutes from "./api/v1/routes/eventPostRoutes";
 import morgan from "morgan";
 import { getHelmetConfig } from "../config/helmetConfig";
-import setupSwagger from "../config/swaggerOptions";
-
-
+import setupSwagger from "../config/swagger";
 
 
 const app: Express = express();
