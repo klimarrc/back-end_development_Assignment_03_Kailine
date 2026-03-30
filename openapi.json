@@ -27,6 +27,61 @@
   ],
   "paths": {
     "/users": {
+      "post": {
+        "summary": "Create a new user account",
+        "tags": [
+          "Users"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "email"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 3,
+                    "maxLength": 100,
+                    "example": "John Doe"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "john@example.com"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
       "get": {
         "summary": "Retrieve a list of all users",
         "tags": [
@@ -40,7 +95,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/validations/User"
+                    "$ref": "#/components/schemas/User"
                   }
                 }
               }
@@ -73,7 +128,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/validations/User"
+                  "$ref": "#/components/schemas/User"
                 }
               }
             }
@@ -83,7 +138,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/validations/Error"
+                  "$ref": "#/components/schemas/Error"
                 }
               }
             }
@@ -112,7 +167,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/validations/User"
+                "$ref": "#/components/schemas/User"
               }
             }
           }
@@ -123,7 +178,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/validations/User"
+                  "$ref": "#/components/schemas/User"
                 }
               }
             }
@@ -133,7 +188,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/validations/Error"
+                  "$ref": "#/components/schemas/Error"
                 }
               }
             }
@@ -143,7 +198,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/validations/Error"
+                  "$ref": "#/components/schemas/Error"
                 }
               }
             }
@@ -176,7 +231,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/validations/Error"
+                  "$ref": "#/components/schemas/Error"
                 }
               }
             }
