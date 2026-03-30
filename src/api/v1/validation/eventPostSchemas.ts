@@ -33,7 +33,7 @@ export const postSchemas = {
       capacity: Joi.number()
         .integer()
         .min(5)
-        .optional()
+        .required()
         .messages({
           "number.base": "\"capacity\" must be a number",
           "number.integer": "\"capacity\" must be an integer",
@@ -63,7 +63,9 @@ export const postSchemas = {
 
       category: Joi.string()
         .valid("general", "conference", "workshop", "meetup")
+        .empty("")
         .default("general")
+        .optional()
         .messages({
           "string.base": "\"category\" must be a string",
           "any.only": "\"category\" must be one of 'general', 'conference', 'workshop', or 'meetup'",
