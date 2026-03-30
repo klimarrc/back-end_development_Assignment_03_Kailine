@@ -4,11 +4,15 @@ import dotenv from 'dotenv';
 dotenv.config();
 import eventPostRoutes from "./api/v1/routes/eventPostRoutes";
 import morgan from "morgan";
+import { apiHelmetConfig } from "../config/helmetConfig";
 
 
 
 
 const app: Express = express();
+
+app.use(apiHelmetConfig); // use helmet for security headers
+
 app.set("json spaces", 2); // set JSON response indentation to 2 spaces for readability
 
 app.use(express.json()); //  use JSON body parsing
