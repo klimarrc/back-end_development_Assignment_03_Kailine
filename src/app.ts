@@ -1,11 +1,15 @@
 import express, { Express } from "express";
+import dotenv from 'dotenv';
+
+dotenv.config();
 import eventPostRoutes from "./api/v1/routes/eventPostRoutes";
 import morgan from "morgan";
-
-
+import { getHelmetConfig } from "../config/helmetConfig";
+import setupSwagger from "../config/swagger";
 
 
 const app: Express = express();
+app.use(getHelmetConfig()); //  use helmet for security headers
 app.set("json spaces", 2); // set JSON response indentation to 2 spaces for readability
 
 app.use(express.json()); //  use JSON body parsing
@@ -30,6 +34,9 @@ app.get("/api/v1/health", (req, res) => {
 });
 
 app.use("/api/v1/events", eventPostRoutes);
+
+// Setup Swagger
+setupSwagger(app);
 
 // Export the app
 export default app;
