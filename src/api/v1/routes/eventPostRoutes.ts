@@ -59,13 +59,13 @@ const router = express.Router();
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/validations/User'
+ *               $ref: '#/components/schemas/User'
  *       '400':
  *         description: Invalid input data
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/validations/Error'
+ *               $ref: '#/components/schemas/Error'
  */
 router.post("/", validateRequest(postSchemas.create), postController.createPostHandler);
 
@@ -83,7 +83,7 @@ router.post("/", validateRequest(postSchemas.create), postController.createPostH
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/validations/User'
+ *                 $ref: '#/components/schemas/User'
  */
 router.get("/", postController.getAllPostsHandler);
 /**
@@ -106,13 +106,13 @@ router.get("/", postController.getAllPostsHandler);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/validations/User'
+ *               $ref: '#/components/schemas/User'
  *       '404':
  *         description: User not found
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/validations/Error'
+ *               $ref: '#/components/schemas/Error'
  */
 router.get("/:id", validateRequest(postSchemas.getById), postController.getPostByIdHandler);
 
@@ -135,26 +135,26 @@ router.get("/:id", validateRequest(postSchemas.getById), postController.getPostB
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/validations/User'
+ *             $ref: '#/components/schemas/User'
  *     responses:
  *       '200':
  *         description: User updated successfully
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/validations/User'
+ *               $ref: '#/components/schemas/User'
  *       '400':
  *         description: Invalid input data
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/validations/Error'
+ *               $ref: '#/components/schemas/Error'
  *       '404':
  *         description: User not found
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/validations/Error'
+ *               $ref: '#/components/schemas/Error'
  */
 router.put("/:id", validateRequest(postSchemas.update), postController.updatePostHandler);
 
@@ -180,7 +180,7 @@ router.put("/:id", validateRequest(postSchemas.update), postController.updatePos
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/validations/Error'
+ *               $ref: '#/components/schemas/Error'
  */
 router.delete("/:id", validateRequest(postSchemas.delete), postController.deletePostHandler);
 
