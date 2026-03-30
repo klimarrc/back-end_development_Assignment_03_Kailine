@@ -3,6 +3,9 @@ import { validateRequest } from "../middleware/validate";
 import * as postController from "../controllers/eventControllers";
 import { postSchemas } from "../validation/eventPostSchemas";
 
+
+
+
 const router = express.Router();
 
 /**
@@ -19,30 +22,50 @@ const router = express.Router();
  *             type: object
  *             required:
  *               - name
- *               - email
+ *               - date
+ *               - registrationCount
+ *               - status
+ *               - category
+ *               - createdAt  
  *             properties:
  *               name:
  *                 type: string
  *                 minLength: 3
  *                 maxLength: 100
  *                 example: "John Doe"
- *               email:
+ *               date:
  *                 type: string
- *                 format: email
- *                 example: "john@example.com"
- *     responses:
+ *                 format: date-time
+ *                 example: "2024-12-31T23:59:59Z"
+ *               registrationCount:
+ *                 type: integer
+ *                 minimum: 0
+ *                 maximum: 100
+ *                 example: 20
+ *               status:
+ *                 type: string
+ *                 enum: [active, inactive]
+ *                 example: "active"
+ *               category:
+ *                 type: string
+ *                 example: "Technology"
+ *               createdAt:
+ *                 type: string
+ *                 format: date-time
+ *                 example: "2024-12-31T23:59:59Z"
+ *      responses:
  *       '201':
  *         description: User created successfully
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/User'
+ *               $ref: '#/components/validations/User'
  *       '400':
  *         description: Invalid input data
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Error'
+ *               $ref: '#/components/validations/Error'
  */
 router.post("/", validateRequest(postSchemas.create), postController.createPostHandler);
 
@@ -60,10 +83,9 @@ router.post("/", validateRequest(postSchemas.create), postController.createPostH
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/User'
+ *                 $ref: '#/components/validations/User'
  */
 router.get("/", postController.getAllPostsHandler);
-
 /**
  * @openapi
  * /users/{id}:
@@ -84,13 +106,13 @@ router.get("/", postController.getAllPostsHandler);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/User'
+ *               $ref: '#/components/validations/User'
  *       '404':
  *         description: User not found
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Error'
+ *               $ref: '#/components/validations/Error'
  */
 router.get("/:id", validateRequest(postSchemas.getById), postController.getPostByIdHandler);
 
@@ -113,26 +135,26 @@ router.get("/:id", validateRequest(postSchemas.getById), postController.getPostB
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/User'
+ *             $ref: '#/components/validations/User'
  *     responses:
  *       '200':
  *         description: User updated successfully
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/User'
+ *               $ref: '#/components/validations/User'
  *       '400':
  *         description: Invalid input data
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Error'
+ *               $ref: '#/components/validations/Error'
  *       '404':
  *         description: User not found
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Error'
+ *               $ref: '#/components/validations/Error'
  */
 router.put("/:id", validateRequest(postSchemas.update), postController.updatePostHandler);
 
@@ -158,7 +180,7 @@ router.put("/:id", validateRequest(postSchemas.update), postController.updatePos
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Error'
+ *               $ref: '#/components/validations/Error'
  */
 router.delete("/:id", validateRequest(postSchemas.delete), postController.deletePostHandler);
 
