@@ -1,4 +1,7 @@
 import express, { Express } from "express";
+import dotenv from 'dotenv';
+
+dotenv.config();
 import eventPostRoutes from "./api/v1/routes/eventPostRoutes";
 import morgan from "morgan";
 
