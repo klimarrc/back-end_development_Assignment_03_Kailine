@@ -1,27 +1,32 @@
-import helmet from 'helmet';
-import app from '../src/app';
+import helmet from "helmet";
 
-// Optimized configuration for JSON APIs
-export const apiHelmetConfig = helmet({
-    // Disable unnecessary middleware for API-only apps
-    contentSecurityPolicy: false, // Not needed for JSON APIs
-    crossOriginEmbedderPolicy: false,
+export const getHelmetConfig = () => {
+    const isDevelopment = process.env.NODE_ENV === "development";
 
-    // Keep essential security headers
-    hsts: {
-        maxAge: 31536000, // 1 year
-        includeSubDomains: true,
-        preload: true,
-    },
+    // Base configuration for APIs
+    const baseConfig = {
+        contentSecurityPolicy: false, // Disable for JSON APIs
+        hidePoweredBy: true, // Always hide server info
+        noSniff: true, // Always prevent MIME sniffing
+    };
 
-    // Remove server information from responses
-    hidePoweredBy: true,
+    if (isDevelopment) {
+        return helmet({
+            ...baseConfig,
+            hsts: false, // No HTTPS enforcement in development
+        });
+    }
 
-    // Prevent MIME type sniffing
-    noSniff: true,
+    // Production gets full security
+    return helmet({
+        ...baseConfig,
+        hsts: {
+            maxAge: 31536000,
+            includeSubDomains: true,
+            preload: true,
+        },
+        frameguard: { action: "deny" },
+        referrerPolicy: { policy: "no-referrer" },
+    });
+};
 
-    // Prevent clickjacking
-    frameguard: { action: "deny" },
-});
-
-app.use(apiHelmetConfig);
