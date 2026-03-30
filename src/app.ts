@@ -5,6 +5,7 @@ dotenv.config();
 import eventPostRoutes from "./api/v1/routes/eventPostRoutes";
 import morgan from "morgan";
 import { getHelmetConfig } from "../config/helmetConfig";
+import setupSwagger from "../config/swaggerOptions";
 
 
 
@@ -35,6 +36,9 @@ app.get("/api/v1/health", (req, res) => {
 });
 
 app.use("/api/v1/events", eventPostRoutes);
+
+// Setup Swagger
+setupSwagger(app);
 
 // Export the app
 export default app;
