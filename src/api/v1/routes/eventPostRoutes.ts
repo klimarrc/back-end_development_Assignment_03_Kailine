@@ -4,8 +4,6 @@ import * as postController from "../controllers/eventControllers";
 import { postSchemas } from "../validation/eventPostSchemas";
 
 
-
-
 const router = express.Router();
 
 /**
@@ -13,7 +11,9 @@ const router = express.Router();
  * /users:
  *   post:
  *     summary: Create a new user account
- *     tags: [Users]
+ *     description: Create a new user
+ *     tags:
+ *       [Users]
  *     requestBody:
  *       required: true
  *       content:
@@ -26,7 +26,7 @@ const router = express.Router();
  *               - registrationCount
  *               - status
  *               - category
- *               - createdAt  
+ *               - createdAt
  *             properties:
  *               name:
  *                 type: string
@@ -53,7 +53,7 @@ const router = express.Router();
  *                 type: string
  *                 format: date-time
  *                 example: "2024-12-31T23:59:59Z"
- *      responses:
+ *     responses:
  *       '201':
  *         description: User created successfully
  *         content:
@@ -67,6 +67,7 @@ const router = express.Router();
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
+
 router.post("/", validateRequest(postSchemas.create), postController.createPostHandler);
 
 /**
