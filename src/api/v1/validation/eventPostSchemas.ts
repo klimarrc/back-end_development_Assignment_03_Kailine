@@ -33,60 +33,34 @@ import Joi from "joi";
  *         capacity:
  *           type: integer
  *           minimum: 5
- *           description: Maximum number of attendees
+ *           description: The maximum number of attendees for the event
  *           example: 50
  *         registrationCount:
  *           type: integer
  *           minimum: 0
- *           description: Current number of attendees
+ *           description: The current number of registered attendees for the event
  *           example: 25
  *         status:
  *           type: string
  *           enum: [active, cancelled, completed]
- *           description: Event status
+ *           description: The current status of the event
  *           example: "active"
  *         category:
  *           type: string
  *           enum: [general, conference, workshop, meetup]
- *           description: Event category
+ *           description: The category of the event
  *           example: "conference"
  *         createdAt:
  *           type: string
  *           format: date-time
- *           description: When the record was created
+ *           description: When the user account was created
  *           example: "2024-01-15T10:30:00Z"
  *         updatedAt:
  *           type: string
  *           format: date-time
- *           description: When the record was last updated
+ *           description: When the user account was last updated
  *           example: "2024-01-20T14:45:00Z"
  *
- *     Error:
- *       type: object
- *       required:
- *         - error
- *         - message
- *       properties:
- *         error:
- *           type: string
- *           description: A brief description of the error
- *           example: "Bad Request"
- *         message:
- *           type: string
- *           description: A detailed error message
- *           example: "Invalid request data"
- *         details:
- *           type: array
- *           description: List of validation errors
- *           items:
- *             type: object
- *             properties:
- *               field:
- *                 type: string
- *                 example: "name"
- *               issue:
- *                 type: string
- *                 example: "\"name\" is required"
  */
 export const postSchemas = {
   // POST /events - Create new event
@@ -239,39 +213,34 @@ export const postSchemas = {
     }),
   },
 };
-
 /**
- * @openapi
- * components:
- *   schemas:
- *     Error:
+ *    Error:
  *       type: object
- *      required:
- *      - error
- *      - message
- *     properties:
- *       error:
- *         type: string
- *         description: A brief description of the error
- *       message:
- *         type: string
- *         description: A detailed message explaining the error
- *         example:
- *         error: "Bad Request"
- *         message: "Invalid request data"
- *       details:
- *         type: array
- *         items:
- *           type: object
- *           properties:
- *             field:
- *               type: string
- *               example: "name"
- *             issue:
- *               type: string
- *               example: "\"name\" is required"
- *             message:
- *               type: string
- *               example: "Invalid request data"
- *            description: An array of specific validation errors (if applicable)
+ *       required:
+ *         - error
+ *         - message
+ *       properties:
+ *         error:
+ *           type: string
+ *           description: A brief description of the error
+ *           example: "Bad Request"
+ *         message:
+ *           type: string
+ *           description: A detailed message explaining the error
+ *           example: "Invalid request data"
+ *         details:
+ *           type: array
+ *           description: An array of specific validation errors
+ *           items:
+ *             type: object
+ *             properties:
+ *               field:
+ *                 type: string
+ *                 example: "name"
+ *               issue:
+ *                 type: string
+ *                 example: "\"name\" is required"
+ *               message:
+ *                 type: string
+ *                 example: "Invalid request data"
  */
