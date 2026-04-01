@@ -4,7 +4,7 @@ import { generateSwaggerSpec } from "./swaggerOptions";
 
 const setupSwagger = (app: Express): void => {
     const specs = generateSwaggerSpec();
-    app.use("/api-docs M5-0385052", swaggerUi.serve, swaggerUi.setup(specs));
+    app.use("/api-docs ", swaggerUi.serve, swaggerUi.setup(specs));
 };
 
 export default setupSwagger;

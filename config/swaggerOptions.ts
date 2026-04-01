@@ -7,7 +7,7 @@ const swaggerOptions: swaggerJsdoc.Options = {
         info: {
             title: "Task Management API Documentation",
             version: "1.0.0",
-            description: "This is the API documentation for the Task Management application.",
+            description: "This is the API documentation for the Task Management application. Developed by Student: 0385052",
         },
         servers: [
             {
